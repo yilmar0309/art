@@ -10,11 +10,11 @@ const Toast = () => {
   const getBackgroundStyle = () => {
     switch (options.variant) {
       case Incubator.ToastPresets.SUCCESS:
-        return Colors.primaryColorSuccess;
+        return 'green';
       case Incubator.ToastPresets.FAILURE:
-        return Colors.primaryColorError;
+        return 'red';
       default:
-        return Colors.white;
+        return 'black';
     }
   };
   const getIconColorStyle = () => {
@@ -51,7 +51,7 @@ const Toast = () => {
       swipeable
       iconColor={getIconColorStyle()}
       zIndex={99999}
-      autoDismiss={5000}
+      autoDismiss={2000}
       elevation={8}
       onDismiss={() => dispatch(setHiddenToast())}
       messageStyle={{

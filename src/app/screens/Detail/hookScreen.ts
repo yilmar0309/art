@@ -1,3 +1,4 @@
+import {useAppDispatch} from '@hooks/useRedux';
 import {Props} from '@navigation/InjectInterface';
 import {ArtEntity} from '@presenter/domain/entity/art.entity';
 import {useGetArtByIdQuery} from '@presenter/domain/RTKQuery/art.rtk';
@@ -10,11 +11,13 @@ import {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import {Incubator} from 'react-native-ui-lib';
 
 const screenWidth = Dimensions.get('screen').width;
 
 export const useHookDetail = (props: Props) => {
   const {id}: any = props.route.params;
+  const dispatch = useAppDispatch();
   const {data, isFetching} = useGetArtByIdQuery(id);
   const height = useSharedValue(1);
 
@@ -89,12 +92,26 @@ export const useHookDetail = (props: Props) => {
         ]),
       });
     }
+    dispatch(
+      props.setShowToast({
+        variant: Incubator.ToastPresets.SUCCESS,
+        message: 'Saved',
+        position: 'top',
+      }),
+    );
     await fetchAsyncData();
   };
 
   const handleRemoveArtToFavorite = async () => {
     const newDataIds = idsArts.filter((e: ArtEntity) => e.id !== id);
     await set({key: 'arts_offline', item: JSON.stringify(newDataIds)});
+    dispatch(
+      props.setShowToast({
+        variant: Incubator.ToastPresets.SUCCESS,
+        message: 'Removed',
+        position: 'top',
+      }),
+    );
     await fetchAsyncData();
   };
 
@@ -108,8 +125,6 @@ export const useHookDetail = (props: Props) => {
       paddingVertical: 24,
     };
   });
-
-  console.log('idsArts', idsArts);
 
   return {
     data: data?.data,
